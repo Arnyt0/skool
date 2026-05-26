@@ -1,0 +1,16 @@
+from PIL import Image
+
+image = Image.open("d0105.jpg")
+
+body = image.load()
+
+w, h = image.size
+
+for y_pos in range(h):
+    for x_pos in range(w):
+
+        blue = body[x_pos, y_pos][0]
+
+        body[x_pos, y_pos] = (0, 0, blue)
+
+image.show()
