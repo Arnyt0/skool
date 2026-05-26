@@ -1,0 +1,94 @@
+from PIL import Image
+
+
+def text_na_bin(text):
+
+    text += "#"
+    binarny_text = ""
+
+    for znak in text:
+
+        hodnota = bin(ord(znak))[2:]
+
+        while len(hodnota) < 7:
+            hodnota = "0" + hodnota
+
+        binarny_text += hodnota
+
+    return binarny_text
+
+
+def zapis_spravu(binary, input_pic, output_pic):
+
+    image = Image.open(input_pic)
+    pix = image.load()
+
+    sirka, vyska = image.size
+
+    for pozicia in range(len(binary)):
+
+        x = pozicia % sirka
+        y = pozicia // sirka
+
+        blue = pix[x, y][2]
+
+        blue_bin = bin(blue)[2:]
+
+        blue_bin = blue_bin[:-1] + binary[pozicia]
+
+        nova_blue = int(blue_bin, 2)
+
+        pix[x, y] = (pix[x, y][0], pix[x, y][1], nova_blue)
+
+    image.save(output_pic)
+
+
+def precitaj_spravu(obrazok):
+
+    image = Image.open(obrazok)
+    pix = image.load()
+
+    text = ""
+    temp_bin = ""
+
+    index = 0
+
+    while True:
+
+        x = index % image.size[0]
+        y = index // image.size[0]
+
+        blue_pixel = pix[x, y][2]
+
+        posledny = bin(blue_pixel)[-1]
+
+        temp_bin += posledny
+
+        if len(temp_bin) == 7:
+
+            znak = chr(int(temp_bin, 2))
+
+            if znak == "#":
+                break
+
+            text += znak
+            temp_bin = ""
+
+        index += 1
+
+        if index >= image.size[0] * image.size[1]:
+            break
+
+    return text
+
+
+vstupny_obrazok = "Nature_celebrating_India.png"
+vystupny_obrazok = "sprava_pre_priatela.png"
+
+sprava = input("Napis spravu: ")
+
+binary_data = text_na_bin(sprava)
+
+zapis_spravu(binary_data, vstupny_obrazok, vystupny_obrazok)
+
+print(precitaj_spravu(vystupny_obrazok))
