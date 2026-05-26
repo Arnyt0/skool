@@ -1,0 +1,72 @@
+from PIL import Image
+import sys
+
+velkost = 1000
+
+obrazok = Image.new("RGB", (velkost, velkost), "white")
+body = obrazok.load()
+
+
+def nacitaj(hodnota, bod, maximum):
+
+    cislo = int(input("Zadaj " + hodnota + " suradnicu " + bod + " bodu: "))
+
+    if cislo < 0 or cislo > maximum:
+        print("Povolene hodnoty su od 0 do", maximum)
+        sys.exit()
+
+    return cislo
+
+
+x1 = nacitaj("x", "prveho", velkost)
+y1 = nacitaj("y", "prveho", velkost)
+
+x2 = nacitaj("x", "druheho", velkost)
+y2 = nacitaj("y", "druheho", velkost)
+
+
+if x1 > x2:
+
+    x1, x2 = x2, x1
+    y1, y2 = y2, y1
+
+
+if x1 != x2:
+
+    smernica = (y1 - y2) / (x1 - x2)
+
+    posun = y1 - (smernica * x1)
+
+    rozdiel_x = abs(x2 - x1)
+    rozdiel_y = abs(y2 - y1)
+
+    if rozdiel_x >= rozdiel_y:
+
+        for x in range(x1, x2 + 1):
+
+            y = round((smernica * x) + posun)
+
+            body[x, y] = (0, 0, 0)
+
+    else:
+
+        if y1 > y2:
+            y1, y2 = y2, y1
+
+        for y in range(y1, y2 + 1):
+
+            x = round((y - posun) / smernica)
+
+            body[x, y] = (0, 0, 0)
+
+else:
+
+    if y2 < y1:
+        y1, y2 = y2, y1
+
+    for y in range(y1, y2 + 1):
+
+        body[x1, y] = (0, 0, 0)
+
+
+obrazok.show()
