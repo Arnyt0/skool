@@ -1,0 +1,16 @@
+from PIL import Image
+
+obr = Image.open("d0105.jpg")
+
+pix = obr.load()
+
+sirka, vyska = obr.size
+
+for i in range(vyska):
+    for j in range(sirka):
+
+        cervena = pix[j, i][0]
+
+        pix[j, i] = (cervena, 0, 0)
+
+obr.show()
