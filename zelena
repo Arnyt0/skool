@@ -1,0 +1,16 @@
+from PIL import Image
+
+foto = Image.open("d0105.jpg")
+
+pixely = foto.load()
+
+x_size, y_size = foto.size
+
+for y in range(y_size):
+    for x in range(x_size):
+
+        green = pixely[x, y][0]
+
+        pixely[x, y] = (0, green, 0)
+
+foto.show()
